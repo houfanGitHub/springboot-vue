@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Users HTML</title> 
+<link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css">
+</head>
+<body>
+	<div id="showUsers">
+		<div>
+			<button data-toggle="modal" data-target="#myInsertModal" class="btn btn-default">添加</button>
+		</div>
+		<table class="table table-hover">
+			<caption>用户信息管理</caption>
+			<tr>
+				<th>uid</th>
+				<th>username</th>
+				<th>gender</th>
+				<th>age</th>
+				<th>操作</th>
+			</tr>
+			<tr v-for="users in usersList">
+				<td>{{users.uid}}</td>
+				<td>{{users.username}}</td>
+				<td>{{users.gender == 'M'?'男':'女'}}</td>
+				<td>{{users.age}}</td>
+				<td>
+					<button v-on:click="bfUpdateUsers(users,$index);" 
+						data-toggle="modal" data-target="#myModal" class="btn btn-primary">修改</button>&nbsp;&nbsp;
+					<button v-on:click="bfDeleteUsers(users,$index);" 
+						data-toggle="modal" data-target="#myDeleteModal" class="btn btn-danger">删除</button>
+				</td>
+			</tr>
+		</table>
+		
+		<!-- 模态框（Modal） -->
+		<div class="modal fade" id="myInsertModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		                <h4 class="modal-title" id="myModalLabel">添加用户信息</h4>
+		            </div>
+		            <div class="modal-body">
+		            	<form class="bs-example bs-example-form" role="form">
+							<div class="input-group">
+								<span class="input-group-addon">姓名</span>
+								<input type="text" class="form-control" 
+									name="username" placeholder="姓名" value="{{user.username}}" v-model="user.username">
+							</div>
+							<br>
+							<div class="input-group">
+								<span class="input-group-addon">性别</span>
+								<select class="form-control" name="gender">
+									<option v-for="genderOption in genderOptions"
+										value="{{genderOption.value}}">{{genderOption.text}}</option>
+							    </select>
+							</div>
+							<br>
+							<div class="input-group">
+								<span class="input-group-addon">年龄</span>
+								<input type="text" name="age" 
+									class="form-control" placeholder="年龄" value="{{user.age}}" v-model="user.age">
+							</div>
+						</form>
+		            </div>
+		            <div class="modal-footer">
+		                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+		                <button type="button" class="btn btn-primary" data-dismiss="modal" v-on:click="insertUsers();">添加用户</button>
+		            </div>
+		        </div><!-- /.modal-content -->
+		    </div><!-- /.modal -->
+		</div>
+		<!-- 模态框（Modal） -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		                <h4 class="modal-title" id="myModalLabel">修改用户信息</h4>
+		            </div>
+		            <div class="modal-body">
+		            	<form class="bs-example bs-example-form" role="form">
+							<div class="input-group">
+								<span class="input-group-addon">姓名</span>
+								<input type="text" class="form-control" 
+									name="username" placeholder="姓名" value="{{user.username}}" v-model="user.username">
+							</div>
+							<br>
+							<div class="input-group">
+								<span class="input-group-addon">性别</span>
+								<select class="form-control" name="gender" v-model="user.gender">
+							      <option v-for="genderOption in genderOptions"
+										value="{{genderOption.value}}">{{genderOption.text}}</option>
+							    </select>
+							</div>
+							<br>
+							<div class="input-group">
+								<span class="input-group-addon">年龄</span>
+								<input type="text" name="age" 
+									class="form-control" placeholder="年龄" value="{{user.age}}" v-model="user.age">
+							</div>
+						</form>
+		            </div>
+		            <div class="modal-footer">
+		                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+		                <button type="button" class="btn btn-primary" data-dismiss="modal" v-on:click="updateUsers();">提交更改</button>
+		            </div>
+		        </div><!-- /.modal-content -->
+		    </div><!-- /.modal -->
+		</div>
+		<!-- 模态框（Modal） -->
+		<div class="modal fade" id="myDeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		                <h4 class="modal-title">删除用户信息</h4>
+		            </div>
+		            <div class="modal-body">确认删除 {{user.username}} 吗?</div>
+		            <div class="modal-footer">
+		                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+		                <button type="button"  class="btn btn-primary" data-dismiss="modal" v-on:click="deleteUsers();">确认删除</button>
+		            </div>
+		        </div><!-- /.modal-content -->
+		    </div><!-- /.modal -->
+		</div>		
+		
+	</div>
+	
+	<script type="text/javascript" src="/js/vue.js"></script>
+	<script type="text/javascript" src="/js/vue-resource.min.js"></script>
+	<script type="text/javascript" src="/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/templates/users.js"></script>
+</body>
+</html>
