@@ -51,7 +51,7 @@
 							<br>
 							<div class="input-group">
 								<span class="input-group-addon">性别</span>
-								<select class="form-control" name="gender">
+								<select class="form-control" name="gender" v-model="user.gender">
 									<option v-for="genderOption in genderOptions"
 										value="{{genderOption.value}}">{{genderOption.text}}</option>
 							    </select>
